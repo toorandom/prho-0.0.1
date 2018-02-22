@@ -1,0 +1,62 @@
+BETA Factoring Programm version prho-0.0.1
+
+poor & ugly implementation of Rho Pollard method for factorization
+using a little of montecarlo taking a quadratic equation of the form x^2+c
+where c can depends of the value taken from the entropy
+it can factorize values of 64 bit , 
+
+Installing:
+
+
+make && make install
+
+using
+
+
+Compiling:
+
+beck@zeta ~/project/pollard $ make
+gcc -Wall -O3 -pipe -fomit-frame-pointer -funroll-loops  -c gcdrec.c
+gcc -Wall -O3 -pipe -fomit-frame-pointer -funroll-loops  -c pollard_rho.c
+gcc -Wall -O3 -pipe -fomit-frame-pointer -funroll-loops  -c primality_check.c
+gcc -Wall -O3 -pipe -fomit-frame-pointer -funroll-loops  -c prime.c
+gcc -Wall -O3 -pipe -fomit-frame-pointer -funroll-loops  -c primes_in_n.c
+gcc -lm -o prho gcdrec.o pollard_rho.o primality_check.o prime.o primes_in_n.o
+
+
+First we usenumber 193243211 to get factors.. i use -p at the final first to check
+if its prime (it it is i wont have any factors)
+as you can see in argv[2] i have /dev/urandom .. that will give a random value to the init
+of the quadratic recursion
+
+beck@zeta ~/project/pollard $ ./prho 193243211 /dev/urandom  -p
+Checking if prime... this make take a lot of time...
+The number is composite [ OK ]
+7*7*3943739=193243211
+
+We got a message from the primality providing sieve algorithm saying that the number is composite [ OK ] so , we can continue finding 
+factors..
+
+then we get the factors.
+
+We do the same with the same number , but now we dont use -p because we know that is composite
+and we use again /dev/urandom... and we get other factors... because the random value obviusly was different
+
+
+beck@zeta ~/project/pollard $ ./prho 193243211 /dev/urandom
+7*29*951937=193243211
+beck@zeta ~/project/pollard $
+
+BUGS:
+
+Too many errors including mem alloc errors (gentoo gcc sends me errors... that i dont understand some times, in other
+machines i dont have problems.. those hackers who see this code check primality_check.c & primes_in_n.c
+who uses free() ... gentoo sometimes says is double free.. so i decided to comment the free() functions..
+i think those functions are ok.. but gentoo says that it isnt ok.
+
+Any comments.. or bugs (there are a lot)
+
+rduarte@ciencias.unam.mx
+
+
+Eduardo Ruiz Duarte
